@@ -70,7 +70,61 @@ function setAutogrow () {
 
 ### React
 
-#### Type-checking useReducer
+#### Detect Click outside of Component
+
+[Source](https://www.robinwieruch.de/react-hook-detect-click-outside-component/)
+
+```jsx
+const useOutsideClick = (callback) => {
+  const ref = React.useRef();
+
+  React.useEffect(() => {
+    const handleClick = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        callback();
+      }
+    };
+
+    document.addEventListener('click', handleClick, true);
+
+    return () => {
+      document.removeEventListener('click', handleClick, true);
+    };
+  }, [ref]);
+
+  return ref;
+};
+
+// Usage
+function App() {
+    const [count, setCount] = React.useState(0);
+
+    const handleClickOutside = () => {
+        setCount(0);
+    };
+    const ref = useOutsideClick(handleClickOutside);
+
+    const handleClick = () => {
+        setCount((state) => state + 1);
+    };
+
+    const handleHeaderClick = (event) => {
+        // do something
+        event.stopPropagation();
+    };
+
+    return (
+        <div style={style} onClick={handleHeaderClick}>
+            <div>Header</div>
+            <button ref={ref} type="button" onClick={handleClick}>
+                Count: {count}
+            </button>
+        </div>
+    );
+}
+```
+
+#### Type-checking useReducer hook
 
 [Source](https://www.benmvp.com/blog/type-checking-react-usereducer-typescript/)
 
