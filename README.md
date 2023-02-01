@@ -170,3 +170,76 @@ const reducer = (state: State, action: Action): State => {
   }
 }
 ```
+
+#### Cure to React useState Hell
+
+[Source](https://www.builder.io/blog/use-reducer)
+
+```jsx
+import { useState } from 'react'
+
+// Problem
+function EditCalendarEvent() {
+  const [startDate, setStartDate] = useState()
+  const [endDate, setEndDate] = useState()
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
+  const [location, setLocation] = useState()
+  const [attendees, setAttendees] = useState([])
+  
+  return <>
+    <input value={title} onChange={e => setTitle(e.target.value)} />
+    {/* ... */}
+  </>
+}
+
+// With ...spread
+function EditCalendarEvent() {
+    const [event, setEvent] = useState({
+        title: '', description: '', attendees: []
+    })
+
+    return <>
+        <input value={event.title}
+               onChange={e => setEvent({...event, title: e.target.value }) } />
+        {/* ... */}
+    </>
+}
+
+// With useReducer
+function EditCalendarEvent() {
+    const [event, updateEvent] = useReducer((prev, next) => {
+        // Validate and transform event, to ensure state is always valid
+        // in a centralized way
+        // ...
+        return { ...prev, ...next }
+    }, { title: '', description: '', attendees: [] })
+
+    return <>
+        <input value={event.title}
+               onChange={e => updateEvent({ title: e.target.value }) } />
+        {/* ... */}
+    </>
+}
+
+// With useReducer and Redux-ify
+function EditCalendarEvent() {
+    const [event, updateEvent] = useReducer((state, action) => {
+        const newEvent = {...state}
+
+        switch (action.type) {
+            case 'updateTitle':
+                newEvent.title = action.title;
+                break;
+            // More actions...
+        }
+        return newEvent
+    }, { title: '', description: '', attendees: [] })
+
+    return <>
+        <input value={event.title}
+               onChange={e => updateEvent({ type: 'updateTitle', title: 'Hello' }) } />
+        {/* ... */}
+    </>
+}
+```
