@@ -2,6 +2,94 @@
 
 ## Python
 
+### All Unique
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def all_unique(lst):
+    return len(lst) == len(set(lst))
+
+
+x = [1,1,2,2,3,2,3,4,5,6]
+y = [1,2,3,4,5]
+all_unique(x) # False
+all_unique(y) # True
+```
+
+### Difference and Difference By
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def difference(a, b):
+    set_a = set(a)
+    set_b = set(b)
+    comparison = set_a.difference(set_b)
+    return list(comparison)
+
+
+difference([1,2,3], [1,2,4]) # [3]
+```
+
+```python
+def difference_by(a, b, fn):
+    b = set(map(fn, b))
+    return [item for item in a if fn(item) not in b]
+
+
+from math import floor
+difference_by([2.1, 1.2], [2.3, 3.4], floor) # [1.2]
+difference_by([{ 'x': 2 }, { 'x': 1 }], [{ 'x': 1 }], lambda v : v['x']) # [ { x: 2 } ]
+```
+
+### Duplicates
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def has_duplicates(lst):
+    return len(lst) != len(set(lst))
+    
+    
+x = [1,2,3,4,5,5]
+y = [1,2,3,4,5]
+has_duplicates(x) # True
+has_duplicates(y) # False
+```
+
+### Chunk
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def chunk(list, size):
+    return [list[i:i+size] for i in range(0,len(list), size)]
+```
+
+### Flatten
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def spread(arg):
+    ret = []
+    for i in arg:
+        if isinstance(i, list):
+            ret.extend(i)
+        else:
+            ret.append(i)
+    return ret
+
+def deep_flatten(xs):
+    flat_list = []
+    [flat_list.extend(deep_flatten(x)) for x in xs] if isinstance(xs, list) else flat_list.append(xs)
+    return flat_list
+
+
+deep_flatten([1, [2], [[3], 4], 5]) # [1,2,3,4,5]
+```
+
 ## JavaScript
 
 ### Vanilla
