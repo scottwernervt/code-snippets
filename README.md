@@ -2,6 +2,143 @@
 
 ## Python
 
+### All Unique
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def all_unique(lst):
+    return len(lst) == len(set(lst))
+
+
+x = [1,1,2,2,3,2,3,4,5,6]
+y = [1,2,3,4,5]
+all_unique(x) # False
+all_unique(y) # True
+```
+
+### Difference and Difference By
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def difference(a, b):
+    set_a = set(a)
+    set_b = set(b)
+    comparison = set_a.difference(set_b)
+    return list(comparison)
+
+
+difference([1,2,3], [1,2,4]) # [3]
+```
+
+```python
+def difference_by(a, b, fn):
+    b = set(map(fn, b))
+    return [item for item in a if fn(item) not in b]
+
+
+from math import floor
+difference_by([2.1, 1.2], [2.3, 3.4], floor) # [1.2]
+difference_by([{ 'x': 2 }, { 'x': 1 }], [{ 'x': 1 }], lambda v : v['x']) # [ { x: 2 } ]
+```
+
+### Duplicates
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def has_duplicates(lst):
+    return len(lst) != len(set(lst))
+    
+    
+x = [1,2,3,4,5,5]
+y = [1,2,3,4,5]
+has_duplicates(x) # True
+has_duplicates(y) # False
+```
+
+### Chunk
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def chunk(list, size):
+    return [list[i:i+size] for i in range(0,len(list), size)]
+```
+
+### Flatten
+
+[Source](https://morioh.com/p/271bc88c0100)
+
+```python
+def spread(arg):
+    ret = []
+    for i in arg:
+        if isinstance(i, list):
+            ret.extend(i)
+        else:
+            ret.append(i)
+    return ret
+
+def deep_flatten(xs):
+    flat_list = []
+    [flat_list.extend(deep_flatten(x)) for x in xs] if isinstance(xs, list) else flat_list.append(xs)
+    return flat_list
+
+
+deep_flatten([1, [2], [[3], 4], 5]) # [1,2,3,4,5]
+```
+
+### Spelling Corrector
+
+[Source](https://norvig.com/spell-correct.html)
+
+```python
+import re
+from collections import Counter
+
+def words(text): return re.findall(r'\w+', text.lower())
+
+WORDS = Counter(words(open('big.txt').read()))
+
+
+def P(word, N=sum(WORDS.values())): 
+    "Probability of `word`."
+    return WORDS[word] / N
+
+
+def correction(word): 
+    "Most probable spelling correction for word."
+    return max(candidates(word), key=P)
+
+
+def candidates(word): 
+    "Generate possible spelling corrections for word."
+    return (known([word]) or known(edits1(word)) or known(edits2(word)) or [word])
+
+
+def known(words): 
+    "The subset of `words` that appear in the dictionary of WORDS."
+    return set(w for w in words if w in WORDS)
+
+
+def edits1(word):
+    "All edits that are one edit away from `word`."
+    letters    = 'abcdefghijklmnopqrstuvwxyz'
+    splits     = [(word[:i], word[i:])    for i in range(len(word) + 1)]
+    deletes    = [L + R[1:]               for L, R in splits if R]
+    transposes = [L + R[1] + R[0] + R[2:] for L, R in splits if len(R)>1]
+    replaces   = [L + c + R[1:]           for L, R in splits if R for c in letters]
+    inserts    = [L + c + R               for L, R in splits for c in letters]
+    return set(deletes + transposes + replaces + inserts)
+
+
+def edits2(word): 
+    "All edits that are two edits away from `word`."
+    return (e2 for e1 in edits1(word) for e2 in edits1(e1))
+```
+
 ## JavaScript
 
 ### Vanilla
