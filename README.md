@@ -1,5 +1,17 @@
 # Code Snippets
 
+## HTML
+
+### Debug
+
+[Source](https://twitter.com/madzadev/status/1690339860459257856)
+
+```css
+* {
+    outline: 2px solid rgba(255, 0, 0, .25);
+}
+```
+
 ## Python
 
 ### All Unique
